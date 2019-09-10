@@ -1,6 +1,6 @@
 A stock app for watching stocks and practicing trading
 
-Inside /config create key.json and create an object with a key string inside it. Clone to local and use npm start. Alternatively, see the live version at ENTER LINK HERE
+Inside src/config create key.json and create an object with a key string inside it. Clone to local and use npm start. Alternatively, see the live version at ENTER LINK HERE
 
 ---
 
