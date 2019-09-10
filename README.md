@@ -1,3 +1,9 @@
+A stock app for watching stocks and practicing trading
+
+Inside /config create key.json and create an object with a key string inside it. Clone to local and use npm start. Alternatively, see the live version at ENTER LINK HERE
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
