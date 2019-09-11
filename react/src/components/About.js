@@ -7,7 +7,7 @@ const Main = () => {
 
   return (
     <>
-      <button onClick={stock => addToWatchlist(stock)}>Test</button>
+      <button onClick={stock => addToWatchlist(stock)}>Test2</button>
     </>
   );
 };

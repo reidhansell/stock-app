@@ -37,18 +37,15 @@ router.post("/", async (req, res) => {
 // @desc     Add stock to watchlist
 // @access   Private
 router.put("/watchlist", auth, async (req, res) => {
-  const { name } = req.body;
+  const { stock } = req.body;
   console.log("Server entered with params:");
-  console.log(name);
+  console.log(stock);
 
-  const newStock = {
-    name: name
-  };
   console.log(req.user.email);
   try {
     const user = await User.findOne({ email: req.user.email });
 
-    user.watchlist.unshift(newStock);
+    user.watchlist.unshift(stock);
 
     await user.save();
 

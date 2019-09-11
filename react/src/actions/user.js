@@ -36,7 +36,10 @@ export const addToWatchlist = async stock => {
         "Content-Type": "application/json"
       }
     };
-    await axios.put("/api/users/watchlist", stock, config);
+    const body = {
+      stock: stock
+    };
+    await axios.put("/api/users/watchlist", body, config);
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {

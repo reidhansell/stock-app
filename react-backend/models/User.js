@@ -22,11 +22,7 @@ const UserSchema = new mongoose.Schema({
       price: { type: String, required: true }
     }
   ],
-  watchlist: [
-    {
-      name: { type: String, required: true }
-    }
-  ]
+  watchlist: [String]
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

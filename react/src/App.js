@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import GoogleLogin from "react-google-login";
 import "./App.css";
 import "bulma/css/bulma.css";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Routes from "./components/Routes";
 
 import Nav from "./components/Nav";
 import Main from "./components/Main";
-import { register, addToWatchlist } from "./actions/user";
+import { register } from "./actions/user";
 import setAuthToken from "./utils/setAuthToken";
 
 //Key for API, secret for google login
@@ -52,8 +54,8 @@ console.log(data);*/
 
 function App() {
   const [state, setState] = useState({
-    isAuthenticated: null,
-    user: null
+    isAuthenticated: localStorage.token ? true : false,
+    user: localStorage.user || null
   });
 
   const { isAuthenticated, user } = state;
@@ -70,6 +72,7 @@ function App() {
     });
 
     localStorage.setItem("token", response.tokenId);
+    localStorage.setItem("user", user);
 
     if (localStorage.token) {
       setAuthToken(localStorage.token);
@@ -78,26 +81,38 @@ function App() {
     }
   };
 
-  const stock = { name: "apple" };
+  const logout = () => {
+    console.log("logout entered");
+    localStorage.clear();
+    setState({
+      isAuthenticated: false,
+      user: null
+    });
+  };
 
   return (
     <div className="App container">
-      <Nav />
-      {isAuthenticated ? (
-        <button onClick={() => addToWatchlist(stock)}>Tester</button>
-      ) : (
-        <>
-          <GoogleLogin
-            clientId="158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
-            buttonText="Login"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={"single_host_origin"}
-          />
-          <br />
-        </>
-      )}
-      <Main />
+      <Router>
+        <Nav
+          responseGoogle={responseGoogle}
+          isAuthenticated={isAuthenticated}
+          logout={logout}
+        />
+
+        <div className="has-text-centered">
+          {isAuthenticated ? (
+            <Route component={Routes} />
+          ) : (
+            <GoogleLogin
+              clientId="158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
+              buttonText="Login"
+              onSuccess={responseGoogle}
+              onFailure={responseGoogle}
+              cookiePolicy={"single_host_origin"}
+            />
+          )}
+        </div>
+      </Router>
     </div>
   );
 }

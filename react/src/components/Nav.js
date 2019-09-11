@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import { GoogleLogin, GoogleLogout } from "react-google-login";
+import { Link } from "react-router-dom";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Get all "navbar-burger" elements
@@ -24,14 +26,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-const Nav = () => {
+const Nav = props => {
+  const { responseGoogle, isAuthenticated, logout } = props;
   return (
     <>
       <nav className="navbar" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
-          <a className="navbar-item" href="https://bulma.io">
+          <Link to="/" className="navbar-item">
             <h3>Stonks</h3>
-          </a>
+          </Link>
 
           <a
             role="button"
@@ -47,48 +50,35 @@ const Nav = () => {
         </div>
 
         <div id="navbarBasicExample" className="navbar-menu">
-          <div className="navbar-start">
-            <a href="a.a.a" className="navbar-item">
-              Home
-            </a>
-
-            <a href="a.a.a" className="navbar-item">
-              Documentation
-            </a>
-
-            <div className="navbar-item has-dropdown is-hoverable">
-              <a href="a.a.a" className="navbar-link">
-                More
-              </a>
-
-              <div className="navbar-dropdown">
-                <a href="a.a.a" className="navbar-item">
-                  About
-                </a>
-                <a href="a.a.a" className="navbar-item">
-                  Jobs
-                </a>
-                <a href="a.a.a" className="navbar-item">
-                  Contact
-                </a>
-                <hr className="navbar-divider" />
-                <a href="a.a.a" className="navbar-item">
-                  Report an issue
-                </a>
-              </div>
-            </div>
-          </div>
-
           <div className="navbar-end">
             <div className="navbar-item">
-              <div className="buttons">
-                <a href="a.a.a" className="button is-primary">
-                  <strong>Sign up</strong>
-                </a>
-                <a href="a.a.a" className="button is-light">
-                  Log in
-                </a>
-              </div>
+              <Link to="/">Watchlist</Link>
+            </div>
+            <div className="navbar-item">
+              <Link to="/profile">Profile</Link>
+            </div>
+            <div className="navbar-item">
+              <Link to="/about">About</Link>
+            </div>
+            <div className="navbar-item">
+              <Link to="/contact">Contact</Link>
+            </div>
+            <div className="navbar-item">
+              {isAuthenticated ? (
+                <GoogleLogout
+                  clientId="158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
+                  buttonText="Logout"
+                  onLogoutSuccess={() => logout()}
+                ></GoogleLogout>
+              ) : (
+                <GoogleLogin
+                  clientId="158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
+                  buttonText="Login"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  cookiePolicy={"single_host_origin"}
+                />
+              )}
             </div>
           </div>
         </div>
