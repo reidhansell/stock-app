@@ -1,10 +1,12 @@
-import React from "react";
-//import {key, secret} from "./config/key.json";
+import React, { useState } from "react";
+import GoogleLogin from "react-google-login";
 import "./App.css";
 import "bulma/css/bulma.css";
 
 import Nav from "./components/Nav";
 import Main from "./components/Main";
+import { register, addToWatchlist } from "./actions/user";
+import setAuthToken from "./utils/setAuthToken";
 
 //Key for API, secret for google login
 //Once the app launches change secret to correct project configuration with google
@@ -48,12 +50,53 @@ import Main from "./components/Main";
 
 console.log(data);*/
 
-
-
 function App() {
+  const [state, setState] = useState({
+    isAuthenticated: null,
+    user: null
+  });
+
+  const { isAuthenticated, user } = state;
+
+  const responseGoogle = response => {
+    console.log(response);
+
+    var user = register("test", response.profileObj.email.toString());
+
+    setState({
+      ...state,
+      user: user,
+      isAuthenticated: true
+    });
+
+    localStorage.setItem("token", response.tokenId);
+
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    } else {
+      setAuthToken(response.tokenObj);
+    }
+  };
+
+  const stock = { name: "apple" };
+
   return (
     <div className="App container">
       <Nav />
+      {isAuthenticated ? (
+        <button onClick={() => addToWatchlist(stock)}>Tester</button>
+      ) : (
+        <>
+          <GoogleLogin
+            clientId="158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+          />
+          <br />
+        </>
+      )}
       <Main />
     </div>
   );

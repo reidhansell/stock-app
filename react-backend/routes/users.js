@@ -1,10 +1,12 @@
 var express = require("express");
 var router = express.Router();
 
+const auth = require("../middleware/auth");
+
 const User = require("../models/User");
 
 // @route    POST api/users
-// @desc     Register user
+// @desc     Login or register user
 // @access   Public
 router.post("/", async (req, res) => {
   const { name, email } = req.body;
@@ -15,7 +17,8 @@ router.post("/", async (req, res) => {
     let user = await User.findOne({ email });
 
     if (user) {
-      return res.status(400).json({ errors: [{ msg: "User already exists" }] });
+      res = user;
+      return res;
     }
 
     user = new User({
@@ -27,6 +30,31 @@ router.post("/", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
+  }
+});
+
+// @route    PUT api/users/watchlist
+// @desc     Add stock to watchlist
+// @access   Private
+router.put("/watchlist", auth, async (req, res) => {
+  const { name } = req.body;
+  console.log("Server entered with params:");
+  console.log(name);
+
+  const newStock = {
+    name: name
+  };
+  console.log(req.user.email);
+  try {
+    const user = await User.findOne({ email: req.user.email });
+
+    user.watchlist.unshift(newStock);
+
+    await user.save();
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).send("Server Error");
   }
 });
 
