@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Routes from "./components/Routes";
 
 import Nav from "./components/Nav";
-import Main from "./components/Main";
 import { register } from "./actions/user";
 import setAuthToken from "./utils/setAuthToken";
 
@@ -58,7 +57,11 @@ function App() {
     user: localStorage.user || null
   });
 
-  const { isAuthenticated, user } = state;
+  const { isAuthenticated /*user*/ } = state;
+
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
 
   const responseGoogle = response => {
     console.log(response);
@@ -74,11 +77,7 @@ function App() {
     localStorage.setItem("token", response.tokenId);
     localStorage.setItem("user", user);
 
-    if (localStorage.token) {
-      setAuthToken(localStorage.token);
-    } else {
-      setAuthToken(response.tokenObj);
-    }
+    setAuthToken(localStorage.token);
   };
 
   const logout = () => {

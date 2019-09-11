@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { Link } from "react-router-dom";
 
@@ -36,8 +36,8 @@ const Nav = props => {
             <h3>Stonks</h3>
           </Link>
 
-          <a
-            role="button"
+          <button
+            style={{ background: "none", border: "none", outline: "none" }}
             className="navbar-burger burger"
             aria-label="menu"
             aria-expanded="false"
@@ -46,7 +46,7 @@ const Nav = props => {
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
-          </a>
+          </button>
         </div>
 
         <div id="navbarBasicExample" className="navbar-menu">

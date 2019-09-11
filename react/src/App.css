@@ -1,1 +1,4 @@
 
+#root .clickable:hover{
+    cursor: pointer;
+}
