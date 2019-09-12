@@ -17,7 +17,8 @@ router.post("/", async (req, res) => {
     let user = await User.findOne({ email });
 
     if (user) {
-      res = user;
+      res.json(user);
+      console.log(user);
       return res;
     }
 
@@ -25,8 +26,10 @@ router.post("/", async (req, res) => {
       name,
       email
     });
-
     await user.save();
+    res.json(user);
+
+    console.log(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -50,6 +53,7 @@ router.put("/watchlist", auth, async (req, res) => {
     await user.save();
 
     res.json(user);
+    console.log(user);
   } catch (err) {
     res.status(500).send("Server Error");
   }

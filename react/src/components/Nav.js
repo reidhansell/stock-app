@@ -30,7 +30,7 @@ const Nav = props => {
   const { responseGoogle, isAuthenticated, logout } = props;
   return (
     <>
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav className="navbar" role="navigation" aria-label="main navigation" style={{backgroundColor:"darkgray"}}>
         <div className="navbar-brand">
           <Link to="/" className="navbar-item">
             <h3>Stonks</h3>
@@ -49,14 +49,18 @@ const Nav = props => {
           </button>
         </div>
 
-        <div id="navbarBasicExample" className="navbar-menu">
+        <div id="navbarBasicExample" className="navbar-menu" style={{backgroundColor:"darkgray"}}>
           <div className="navbar-end">
-            <div className="navbar-item">
-              <Link to="/">Watchlist</Link>
-            </div>
-            <div className="navbar-item">
-              <Link to="/profile">Profile</Link>
-            </div>
+            {isAuthenticated ? (
+              <>
+                <div className="navbar-item">
+                  <Link to="/">Watchlist</Link>
+                </div>
+                <div className="navbar-item">
+                  <Link to="/profile">Profile</Link>
+                </div>
+              </>
+            ) : null}
             <div className="navbar-item">
               <Link to="/about">About</Link>
             </div>

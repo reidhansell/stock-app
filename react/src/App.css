@@ -1,4 +1,41 @@
+#root {
+  font-family: "Fjalla One", sans-serif;
+  color: black;
+}
+#root .clickable {
+  cursor: pointer;
+  color: black;
+  transition: 0.8s;
+}
+#root .clickable:hover {
+  cursor: pointer;
+  color: green;
+  transition: 0.8s;
+}
 
-#root .clickable:hover{
-    cursor: pointer;
+#root a {
+  color: green;
+  transition: 0.8s;
+}
+#root a:hover {
+  color: black;
+  transition: 0.8s;
+}
+
+#spinner {
+  border: 2px solid lightgray;
+  border-top-color: white;
+  width: 17.5vh;
+  height: 17.5vh;
+  border-radius: 50%;
+  animation: spin 1s infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

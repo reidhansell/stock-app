@@ -13,10 +13,12 @@ export const register = async (name, email) => {
   const body = JSON.stringify({ name, email });
 
   try {
-    const res = await axios.post("/api/users/", body, config);
-
-    return res;
+    const res = await axios.post("/api/users", body, config);
+    console.log("res.data: ");
+    console.log(res.data);
+    return res.data;
   } catch (err) {
+    console.log("error");
     const errors = err.response.data.errors;
 
     if (errors) {
