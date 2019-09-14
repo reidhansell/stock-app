@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set PORT=3001 && node server"
+    "start": "node server"
   },
   "dependencies": {
     "config": "^3.2.2",
