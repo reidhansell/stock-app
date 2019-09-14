@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "concurrently \"npm start --prefix react/\" \"npm start --prefix react-backend/\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix react-backend &&npm install --prefix react && npm run build --prefix react"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix react-backend && npm install --prefix react && npm run build --prefix react"
   },
   "dependencies": {
     "concurrently": "^4.1.2"
