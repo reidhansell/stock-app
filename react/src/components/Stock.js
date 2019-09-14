@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { removeFromWatchlist } from "../actions/user";
+import { removeFromWatchlist, addToTrades } from "../actions/user";
 
 /* Data example:
 [
@@ -32,32 +32,97 @@ const Stock = props => {
   const stock = props.stock;
   const setWatchlist = props.setWatchlist;
   const user = props.user;
+  const updateUser = props.updateUser;
   const [loading, setLoading] = useState(false);
+  const [amount, setAmount] = useState(1);
 
   const onClick = async ticker => {
-    setLoading(true);
-    const watchlist = await removeFromWatchlist(ticker);
-    setWatchlist(watchlist);
-    user.watchlist = watchlist;
+    if (
+      user.inventory.find(x => {
+        return x.ticker === stock.symbol && x.amount > 0;
+      })
+    ) {
+      return;
+    } else {
+      setLoading(true);
+      const watchlist = await removeFromWatchlist(ticker);
+      setWatchlist(watchlist);
+      user.watchlist = watchlist;
 
-    localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
+    }
   };
 
   return loading ? (
     <div id="spinner" style={{ margin: "auto" }} />
   ) : (
     <div className="box" style={{ margin: "20px" }}>
-      <h1 className="columns is-mobile">
-        <div className="column is-11" style={{paddingLeft:"10%"}}>{stock.name}</div>
+      <h3 className="columns is-mobile title is-3">
+        <div className="column is-11" style={{ paddingLeft: "10%" }}>
+          {stock.name}
+        </div>
         <div
           className="column clickable has-text-right is-1"
           onClick={() => onClick(stock.symbol)}
         >
-          X
+          <small>x</small>
         </div>
-      </h1>
-      <h3>Price: {stock.price}</h3>
-      <h3>Price close yesterday: {stock.close_yesterday}</h3>
+      </h3>
+      <h5 className="subtitle is-5">
+        Price: {stock.price}
+        <br />
+        Owned:{" "}
+        {user.inventory.find(x => {
+          return x.ticker === stock.symbol;
+        })
+          ? user.inventory.find(x => {
+              return x.ticker === stock.symbol;
+            }).amount
+          : 0}
+      </h5>
+      <button className="button" onClick={() => setAmount(amount + 1)}>
+        +
+      </button>
+      <span style={{ fontSize: "18pt", margin: "10px" }}>{amount}</span>
+      <button
+        className="button"
+        onClick={() => setAmount(amount - 1)}
+        style={{ marginRight: "15px" }}
+      >
+        -
+      </button>
+      <button
+        className="button"
+        onClick={async () =>
+          updateUser(
+            await addToTrades({
+              tradeType: "buy",
+              ticker: stock.symbol,
+              price: stock.price,
+              amount: amount
+            })
+          )
+        }
+        style={{ marginLeft: "15px", marginRight: "5px" }}
+      >
+        Buy
+      </button>
+      <button
+        className="button"
+        onClick={async () =>
+          updateUser(
+            await addToTrades({
+              tradeType: "sell",
+              ticker: stock.symbol,
+              price: stock.price,
+              amount: amount
+            })
+          )
+        }
+        style={{ marginLeft: "5px", marginRight: "10px" }}
+      >
+        Sell
+      </button>
     </div>
   );
 };

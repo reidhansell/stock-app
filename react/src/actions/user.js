@@ -73,3 +73,29 @@ export const removeFromWatchlist = async ticker => {
     }
   }
 };
+
+// Add trade to trades
+export const addToTrades = async trade => {
+  console.log("action entered");
+  console.log("parameters:");
+  console.log(trade);
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    const body = {
+      trade: trade
+    };
+    const res = await axios.put("/api/users/trades", body, config);
+    console.log("res.data: ");
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      console.log(errors);
+    }
+  }
+};

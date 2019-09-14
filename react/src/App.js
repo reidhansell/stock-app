@@ -10,13 +10,18 @@ import { register } from "./actions/user";
 import setAuthToken from "./utils/setAuthToken";
 
 function App() {
-  
   const [state, setState] = useState({
     isAuthenticated: localStorage.getItem("token") ? true : false,
     user: localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user"))
       : null
   });
+
+  //To be passed to child components
+  const updateUser = user => {
+    localStorage.setItem("user", JSON.stringify(user));
+    setState({ ...state, user });
+  };
 
   const { isAuthenticated, user } = state;
   console.log("USER IN APP: " + JSON.stringify(user));
@@ -65,9 +70,12 @@ function App() {
 
         <div className="has-text-centered">
           {isAuthenticated ? (
-            <Route component={() => <Routes user={user} />} />
+            <Route
+              component={() => <Routes user={user} updateUser={updateUser} />}
+            />
           ) : (
             <>
+              <br />
               <h1 className="title is-1">Stonks</h1>
               <br />
               <h3 className="subtitle is-3">

@@ -79,4 +79,48 @@ router.delete("/watchlist/:ticker", auth, async (req, res) => {
   }
 });
 
+// @route    PUT api/users/watchlist
+// @desc     Add stock to watchlist
+// @access   Private
+router.put("/trades", auth, async (req, res) => {
+  const { trade } = req.body;
+  trade.date = new Date(Date.now());
+  console.log("Server entered with params:");
+  console.log(trade);
+
+  console.log(req.user.email);
+  try {
+    const user = await User.findOne({ email: req.user.email });
+
+    user.trades.unshift(trade);
+
+    if (trade.tradeType === "buy") {
+      if (
+        user.inventory.find(x => {
+          return x.ticker === trade.ticker;
+        })
+      ) {
+        user.inventory.find(x => {
+          return x.ticker === trade.ticker;
+        }).amount += trade.amount;
+      } else {
+        user.inventory.unshift({ ticker: trade.ticker, amount: trade.amount });
+      }
+      user.capital = user.capital - trade.amount * trade.price;
+    } else if (trade.tradeType === "sell") {
+      user.inventory.find(x => {
+        return x.ticker === trade.ticker;
+      }).amount -= trade.amount;
+      user.capital = user.capital + trade.amount * trade.price;
+    }
+
+    await user.save();
+
+    res.json(user);
+    console.log(user);
+  } catch (err) {
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

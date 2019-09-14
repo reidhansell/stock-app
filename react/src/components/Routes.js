@@ -12,7 +12,13 @@ const Routes = withRouter(props => {
   console.log("USER IN ROUTES: " + JSON.stringify(props.user));
   return (
     <Switch>
-      <Route exact path="/" component={() => <Main user={props.user} />} />
+      <Route
+        exact
+        path="/"
+        component={() => (
+          <Main user={props.user} updateUser={props.updateUser} />
+        )}
+      />
       <Route
         exact
         path="/profile"

@@ -46,9 +46,10 @@ const Main = withRouter(props => {
   const user = props.user;
   const [watchlist, setWatchlist] = useState(user.watchlist);
   const [loading, setLoading] = useState(false);
+  const [net, setNet] = useState(0);
 
   console.log("USER IN MAIN: " + JSON.stringify(user));
-  //https://api.worldtradingdata.com/api/v1/stock?symbol=AAPL,MSFT,HSBA.L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x
+  //https://api.worldtradingdata.com/api/v1/stock?symbol=AAPL,MSFT,HSBA.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6
   useEffect(() => {
     const fetchData = async () => {
       console.log(
@@ -65,13 +66,26 @@ const Main = withRouter(props => {
                 watchlist.map(x => {
                   return x;
                 }) +
-                ",.L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x"
+                ",.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6"
             ).then(res => res.json())
           : null;
       if (result !== null) {
         localStorage.setItem("data", result.data);
+        setNet(0);
+        console.log("user.inventory: " + JSON.stringify(user.inventory));
+        user.inventory.forEach(x => {
+          console.log("x" + JSON.stringify(x));
+          setNet(
+            net +
+              result.data.find(x2 => {
+                console.log("x2" + JSON.stringify(x2));
+                return x2.symbol === x.ticker;
+              }).price *
+                x.amount
+          );
+        });
       }
-      
+
       setData(result === null ? null : result.data);
     };
 
@@ -83,7 +97,7 @@ const Main = withRouter(props => {
   const onClick = async ticker => {
     setSearch("");
     setLoading(true);
-    const watchlist = await addToWatchlist(ticker)
+    const watchlist = await addToWatchlist(ticker);
     setWatchlist(watchlist);
     user.watchlist = watchlist;
 
@@ -94,8 +108,8 @@ const Main = withRouter(props => {
   return (
     <>
       <br />
-      <div className="box" style={{ margin: "10px" }}>
-        <h5 className="subtitle is-5">
+      <div className="" style={{ margin: "10px" }}>
+        <h5 className="title is-5">
           Search for a stock and select it to add to your watchlist
         </h5>
         <input
@@ -116,6 +130,10 @@ const Main = withRouter(props => {
               );
             })
           : null}
+        <br />
+        <br />
+        <h5 className="title is-5">Capital: ${user.capital}</h5>
+        <h5 className="title is-5">Net: ${user.capital + net}</h5>
       </div>
       {loading ? <div id="spinner" style={{ margin: "auto" }} /> : null}
       {data
@@ -125,6 +143,7 @@ const Main = withRouter(props => {
                 key={x.name}
                 stock={x}
                 user={user}
+                updateUser={props.updateUser}
                 setWatchlist={watchlist => setWatchlist(watchlist)}
               />
             );
