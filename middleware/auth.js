@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 const config = require("config");
 const { OAuth2Client } = require("google-auth-library");
 
@@ -14,13 +13,13 @@ module.exports = function(req, res, next) {
   // Verify token
   try {
     const client = new OAuth2Client(
-      "158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
+      config.get("secret")
     );
     async function verify() {
       const ticket = await client.verifyIdToken({
         idToken: token,
         audience:
-          "158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com" // Specify the CLIENT_ID of the app that accesses the backend
+          config.get("secret") // Specify the CLIENT_ID of the app that accesses the backend
         // Or, if multiple clients access the backend:
         //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
       });
