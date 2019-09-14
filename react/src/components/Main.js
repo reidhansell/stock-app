@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import stocks from "stock-ticker-symbol";
 import { addToWatchlist } from "../actions/user";
-
 import { withRouter } from "react-router-dom";
-
+import Stock from "./Stock";
 /* Data example:
 [
   { 52_week_high: "233.47",
@@ -44,38 +43,52 @@ console.log(data);*/
 
 const Main = withRouter(props => {
   const [data, setData] = useState([]);
-
   const user = props.user;
+  const [watchlist, setWatchlist] = useState(user.watchlist);
+  const [loading, setLoading] = useState(false);
+
   console.log("USER IN MAIN: " + JSON.stringify(user));
   //https://api.worldtradingdata.com/api/v1/stock?symbol=AAPL,MSFT,HSBA.L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x
   useEffect(() => {
     const fetchData = async () => {
       console.log(
         "QUERY IN MAIN: https://api.worldtradingdata.com/api/v1/stock?symbol=" +
-          user.watchlist.map(x => {
+          watchlist.map(x => {
             return x;
           }) +
-          ".L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x"
+          ",.L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x"
       );
-      const result = await fetch(
-        "https://api.worldtradingdata.com/api/v1/stock?symbol=" +
-          user.watchlist.map(x => {
-            return x;
-          }) +
-          ".L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x"
-      ).then(res => res.json());
-      console.log("RESULT: " + JSON.stringify(result));
-      setData(result.data);
+      const result =
+        watchlist.length > 0
+          ? await fetch(
+              "https://api.worldtradingdata.com/api/v1/stock?symbol=" +
+                watchlist.map(x => {
+                  return x;
+                }) +
+                ",.L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x"
+            ).then(res => res.json())
+          : null;
+      if (result !== null) {
+        localStorage.setItem("data", result.data);
+      }
+      
+      setData(result === null ? null : result.data);
     };
 
     fetchData();
-  }, [user]);
+  }, [watchlist, user]);
 
   const [search, setSearch] = useState("");
 
-  const onClick = stock => {
-    addToWatchlist(stock);
+  const onClick = async ticker => {
     setSearch("");
+    setLoading(true);
+    const watchlist = await addToWatchlist(ticker)
+    setWatchlist(watchlist);
+    user.watchlist = watchlist;
+
+    localStorage.setItem("user", JSON.stringify(user));
+    setLoading(false);
   };
 
   return (
@@ -95,7 +108,7 @@ const Main = withRouter(props => {
         />
         {search
           ? stocks.search(search).map(x => {
-              return (
+              return x.ticker.toLowerCase().includes("test") ? null : (
                 <h5 className="clickable" onClick={() => onClick(x.ticker)}>
                   {console.log(x)}
                   {x.ticker + ": " + x.name}
@@ -104,13 +117,19 @@ const Main = withRouter(props => {
             })
           : null}
       </div>
-      {data ? (
-        data.map(x => {
-          return <h1 key={x.name}>{x.name}</h1>;
-        })
-      ) : (
-        <div id="spinner" style={{ margin: "auto" }} />
-      )}
+      {loading ? <div id="spinner" style={{ margin: "auto" }} /> : null}
+      {data
+        ? data.map(x => {
+            return (
+              <Stock
+                key={x.name}
+                stock={x}
+                user={user}
+                setWatchlist={watchlist => setWatchlist(watchlist)}
+              />
+            );
+          })
+        : null}
     </>
   );
 });

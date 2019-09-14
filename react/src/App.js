@@ -10,6 +10,7 @@ import { register } from "./actions/user";
 import setAuthToken from "./utils/setAuthToken";
 
 function App() {
+  
   const [state, setState] = useState({
     isAuthenticated: localStorage.getItem("token") ? true : false,
     user: localStorage.getItem("user")

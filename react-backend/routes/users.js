@@ -52,8 +52,28 @@ router.put("/watchlist", auth, async (req, res) => {
 
     await user.save();
 
-    res.json(user);
-    console.log(user);
+    res.json(user.watchlist);
+    console.log(user.watchlist);
+  } catch (err) {
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route    DELETE api/users/watchlist/:ticker
+// @desc     Remove ticker from watchlist
+// @access   Private
+router.delete("/watchlist/:ticker", auth, async (req, res) => {
+  console.log("Server entered with params:");
+  console.log(req.params.ticker);
+  try {
+    const user = await User.findOne({ email: req.user.email });
+
+    await user.watchlist.pull(req.params.ticker);
+
+    await user.save();
+
+    res.json(user.watchlist);
+    console.log(user.watchlist);
   } catch (err) {
     res.status(500).send("Server Error");
   }
