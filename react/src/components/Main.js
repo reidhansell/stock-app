@@ -80,8 +80,12 @@ const Main = withRouter(props => {
               result.data.find(x2 => {
                 console.log("x2" + JSON.stringify(x2));
                 return x2.symbol === x.ticker;
-              }).price *
-                x.amount
+              })
+              ? result.data.find(x2 => {
+                  console.log("x2" + JSON.stringify(x2));
+                  return x2.symbol === x.ticker;
+                }).price * x.amount
+              : null
           );
         });
       }
