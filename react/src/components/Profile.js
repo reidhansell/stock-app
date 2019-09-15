@@ -7,7 +7,22 @@ const Main = props => {
     <>
       <br />
       <h1 className="title is-1">{user.name}</h1>
-      <h3 className="subtitle is-3">Trade history:</h3>
+      <h3 className="subtitle is-3">Stocks Owned:</h3>
+      <ul>
+        {user.inventory.length > 0
+          ? user.inventory.map(x => {
+              return x.amount > 0 ? (
+                <li key={uuid.v4()}>
+                  <h5 className="subtitle is-5">
+                    {x.ticker} ({x.amount})
+                  </h5>
+                </li>
+              ) : null;
+            })
+          : null}
+      </ul>
+      <br />
+      <h3 className="subtitle is-3">Trade History:</h3>
       <ul>
         {user.trades.length > 0
           ? user.trades.map(x => {
@@ -23,7 +38,8 @@ const Main = props => {
                   <br />
                   {x.date.substring(0, 10)}
                   <br />
-                  {x.tradeType} ({x.amount})
+                  {x.tradeType.charAt(0).toUpperCase() + x.tradeType.slice(1)} (
+                  {x.amount})
                   <br />
                   {x.price}
                 </li>
@@ -31,6 +47,7 @@ const Main = props => {
             })
           : null}
       </ul>
+      <br />
     </>
   );
 };

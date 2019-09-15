@@ -16,7 +16,7 @@ const Nav = props => {
         <>
           <div className="navbar-brand">
             <Link to="/" className="navbar-item" onClick={() => setOpen(false)}>
-              <h3 className="title is-3 clickable">Stonks</h3>
+              <h3 className="title is-3 clickable">STONKS</h3>
             </Link>
 
             <button
@@ -75,7 +75,7 @@ const Nav = props => {
         <>
           <div className="navbar-brand" style={{ width: "100%" }}>
             <Link to="/" className="navbar-item" onClick={() => setOpen(false)}>
-              <h3 className="title is-3 clickable">Stonks</h3>
+              <h3 className="title is-3 clickable">STONKS</h3>
             </Link>
 
             <div className="navbar-item" style={{ marginLeft: "auto" }}>

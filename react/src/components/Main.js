@@ -143,8 +143,14 @@ const Main = withRouter(props => {
           <br />
         </ul>
         <br />
-        <h5 className="title is-5">Capital: ${user.capital}</h5>
-        <h5 className="title is-5">Net: ${net === null ? 0 : net}</h5>
+        <h5 className="title is-5">Capital: ${user.capital.toFixed(2)}</h5>
+        <h5 className="title is-5">Net: ${net === null ? 0 : net.toFixed(2)}</h5>
+        <h5 className="title is-5">
+          Profit/losses:{" "}
+          <span style={{ color: 25000 - net >= 0 ? "green" : "red" }}>
+            ${25000 - net.toFixed(2)}
+          </span>
+        </h5>
       </div>
       {loading ? <div id="spinner" style={{ margin: "auto" }} /> : null}
       {data

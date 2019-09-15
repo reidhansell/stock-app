@@ -79,14 +79,19 @@ function App() {
           ) : (
             <>
               <br />
-              <h1 className="title is-1">Stonks</h1>
+              <h1 className="title is-1">STONKS</h1>
               <br />
               <h3 className="subtitle is-3">
-                Welcome to stonks, a paper-trading web application
+                Welcome to Stonks, a paper-trading web application.
                 <br />
                 <br />
-                Log in with Google to start tracking and paper-trading stocks.
+                Log in with Google to start tracking and paper-trading stocks
               </h3>
+              <br />
+              <h5 className="subtitle is-5">
+                ! Only an email and your "trades" are saved in our database.
+                Google handles the rest !
+              </h5>
               <br />
               <GoogleLogin
                 clientId="158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
@@ -95,6 +100,21 @@ function App() {
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
               />
+
+              <br />
+              <br />
+              <br />
+              <small>
+                Made by{" "}
+                <a
+                  href="https://www.reidhansell.com"
+                  className="text-primary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Reid Hansell
+                </a>
+              </small>
             </>
           )}
         </div>
