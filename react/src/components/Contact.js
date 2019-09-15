@@ -1,7 +1,5 @@
 import React from "react";
 
-import { addToWatchlist } from "../actions/user";
-
 const Main = () => {
   return (
     <>

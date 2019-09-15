@@ -24,7 +24,7 @@ function App() {
   };
 
   const { isAuthenticated, user } = state;
-  console.log("USER IN APP: " + JSON.stringify(user));
+  //console.log("USER IN APP: " + JSON.stringify(user));
 
   if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -33,8 +33,11 @@ function App() {
   const responseGoogle = async response => {
     console.log(response);
 
-    var user = await register("test", response.profileObj.email.toString());
-    console.log("USER IN APP.JS: " + user);
+    var user = await register(
+      response.profileObj.name.toString(),
+      response.profileObj.email.toString()
+    );
+    //console.log("USER IN APP.JS: " + user);
 
     setState({
       ...state,
@@ -45,7 +48,7 @@ function App() {
     localStorage.setItem("token", response.tokenId);
     localStorage.setItem("user", JSON.stringify(user));
 
-    console.log("LOCAL: " + localStorage.getItem("user"));
+    //console.log("LOCAL: " + localStorage.getItem("user"));
 
     setAuthToken(localStorage.token);
   };

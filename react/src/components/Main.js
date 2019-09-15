@@ -50,15 +50,20 @@ const Main = withRouter(props => {
 
   console.log("USER IN MAIN: " + JSON.stringify(user));
   //https://api.worldtradingdata.com/api/v1/stock?symbol=AAPL,MSFT,HSBA.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6
+
   useEffect(() => {
     const fetchData = async () => {
-      console.log(
+      //For debugging the query:
+
+      /*console.log(
         "QUERY IN MAIN: https://api.worldtradingdata.com/api/v1/stock?symbol=" +
           watchlist.map(x => {
             return x;
           }) +
           ",.L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x"
-      );
+      );*/
+      setNet(0);
+      var newNet = 0;
       const result =
         watchlist.length > 0
           ? await fetch(
@@ -71,25 +76,24 @@ const Main = withRouter(props => {
           : null;
       if (result !== null) {
         localStorage.setItem("data", result.data);
-        setNet(0);
         console.log("user.inventory: " + JSON.stringify(user.inventory));
         user.inventory.forEach(x => {
           console.log("x" + JSON.stringify(x));
-          setNet(
-            net +
+          if (x.amount > 0) {
+            newNet +=
               result.data.find(x2 => {
                 console.log("x2" + JSON.stringify(x2));
                 return x2.symbol === x.ticker;
-              })
-              ? result.data.find(x2 => {
-                  console.log("x2" + JSON.stringify(x2));
-                  return x2.symbol === x.ticker;
-                }).price * x.amount
-              : null
-          );
+              }) === null
+                ? null
+                : result.data.find(x2 => {
+                    console.log("x2" + JSON.stringify(x2));
+                    return x2.symbol === x.ticker;
+                  }).price * x.amount;
+          }
         });
       }
-
+      setNet(user.capital + newNet);
       setData(result === null ? null : result.data);
     };
 
@@ -112,9 +116,9 @@ const Main = withRouter(props => {
   return (
     <>
       <br />
-      <div className="" style={{ margin: "10px" }}>
+      <div style={{ margin: "10px" }}>
         <h5 className="title is-5">
-          Search for a stock and select it to add to your watchlist
+          Search for a stock and select to add to your watchlist
         </h5>
         <input
           style={{ fontFamily: "Fjalla One, sans-serif" }}
@@ -124,20 +128,23 @@ const Main = withRouter(props => {
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        {search
-          ? stocks.search(search).map(x => {
-              return x.ticker.toLowerCase().includes("test") ? null : (
-                <h5 className="clickable" onClick={() => onClick(x.ticker)}>
-                  {console.log(x)}
-                  {x.ticker + ": " + x.name}
-                </h5>
-              );
-            })
-          : null}
         <br />
+        <ul style={{ borderBottom: "1px solid gray" }}>
+          {search
+            ? stocks.search(search).map(x => {
+                return x.ticker.toLowerCase().includes("test") ? null : (
+                  <li className="clickable" onClick={() => onClick(x.ticker)}>
+                    {console.log(x)}
+                    {x.ticker + ": " + x.name}
+                  </li>
+                );
+              })
+            : null}
+          <br />
+        </ul>
         <br />
         <h5 className="title is-5">Capital: ${user.capital}</h5>
-        <h5 className="title is-5">Net: ${user.capital + net}</h5>
+        <h5 className="title is-5">Net: ${net === null ? 0 : net}</h5>
       </div>
       {loading ? <div id="spinner" style={{ margin: "auto" }} /> : null}
       {data
