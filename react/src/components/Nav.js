@@ -15,12 +15,12 @@ const Nav = props => {
       >
         <div className="navbar-brand">
           <Link to="/" className="navbar-item" onClick={() => setOpen(false)}>
-            <h3 className="title is-3">Stonks</h3>
+            <h3 className="title is-3 clickable">Stonks</h3>
           </Link>
 
           <button
             style={{ background: "none", border: "none", outline: "none" }}
-            className="navbar-burger burger"
+            className="navbar-burger burger clickable"
             onClick={() => setOpen(!open)}
           >
             <span aria-hidden="true"></span>
@@ -39,24 +39,24 @@ const Nav = props => {
               <>
                 <div className="navbar-item">
                   <Link to="/" onClick={() => setOpen(false)}>
-                    Watchlist
+                    <h5 className="subtitle is-5 clickable">Watchlist</h5>
                   </Link>
                 </div>
                 <div className="navbar-item">
                   <Link to="/profile" onClick={() => setOpen(false)}>
-                    Profile
+                    <h5 className="subtitle is-5 clickable">Profile</h5>
                   </Link>
                 </div>
               </>
             ) : null}
             <div className="navbar-item">
               <Link to="/about" onClick={() => setOpen(false)}>
-                About
+                <h5 className="subtitle is-5 clickable">About</h5>
               </Link>
             </div>
             <div className="navbar-item">
               <Link to="/contact" onClick={() => setOpen(false)}>
-                Contact
+                <h5 className="subtitle is-5 clickable">Contact</h5>
               </Link>
             </div>
             <div className="navbar-item">

@@ -11,23 +11,23 @@ import setAuthToken from "./utils/setAuthToken";
 
 function App() {
   const [state, setState] = useState({
-    isAuthenticated: localStorage.getItem("token") ? true : false,
-    user: localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user"))
+    isAuthenticated: sessionStorage.getItem("token") ? true : false,
+    user: sessionStorage.getItem("user")
+      ? JSON.parse(sessionStorage.getItem("user"))
       : null
   });
 
   //To be passed to child components
   const updateUser = user => {
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user));
     setState({ ...state, user });
   };
 
   const { isAuthenticated, user } = state;
   //console.log("USER IN APP: " + JSON.stringify(user));
 
-  if (localStorage.token) {
-    setAuthToken(localStorage.token);
+  if (sessionStorage.token) {
+    setAuthToken(sessionStorage.token);
   }
 
   const responseGoogle = async response => {
@@ -45,17 +45,17 @@ function App() {
       isAuthenticated: true
     });
 
-    localStorage.setItem("token", response.tokenId);
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("token", response.tokenId);
+    sessionStorage.setItem("user", JSON.stringify(user));
 
-    //console.log("LOCAL: " + localStorage.getItem("user"));
+    //console.log("LOCAL: " + sessionStorage.getItem("user"));
 
-    setAuthToken(localStorage.token);
+    setAuthToken(sessionStorage.token);
   };
 
   const logout = () => {
     console.log("logout entered");
-    localStorage.clear();
+    sessionStorage.clear();
     setState({
       isAuthenticated: false,
       user: null
@@ -63,7 +63,7 @@ function App() {
   };
 
   return (
-    <div className="App container">
+    <div className="App">
       <Router>
         <Nav
           responseGoogle={responseGoogle}
@@ -71,7 +71,7 @@ function App() {
           logout={logout}
         />
 
-        <div className="has-text-centered">
+        <div className="has-text-centered container">
           {isAuthenticated ? (
             <Route
               component={() => <Routes user={user} updateUser={updateUser} />}

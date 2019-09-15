@@ -36,6 +36,22 @@ const Stock = props => {
   const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(1);
 
+  const verifyTrade = async trade => {
+    if (trade.tradeType === "sell") {
+      if (
+        user.inventory.find(x => {
+          return x.ticker === stock.symbol && x.amount >= trade.amount;
+        })
+      ) {
+        updateUser(await addToTrades(trade));
+      }
+    } else {
+      if (user.capital >= trade.price * trade.amount) {
+        updateUser(await addToTrades(trade));
+      }
+    }
+  };
+
   const onClick = async ticker => {
     if (
       user.inventory.find(x => {
@@ -49,7 +65,7 @@ const Stock = props => {
       setWatchlist(watchlist);
       user.watchlist = watchlist;
 
-      localStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("user", JSON.stringify(user));
     }
   };
 
@@ -86,7 +102,7 @@ const Stock = props => {
       <span style={{ fontSize: "18pt", margin: "10px" }}>{amount}</span>
       <button
         className="button"
-        onClick={() => setAmount(amount - 1)}
+        onClick={() => setAmount(amount - 1 > 1 ? amount - 1 : 1)}
         style={{ marginRight: "15px" }}
       >
         -
@@ -94,32 +110,38 @@ const Stock = props => {
       <button
         className="button"
         onClick={async () =>
-          updateUser(
-            await addToTrades({
-              tradeType: "buy",
-              ticker: stock.symbol,
-              price: stock.price,
-              amount: amount
-            })
-          )
+          verifyTrade({
+            tradeType: "buy",
+            ticker: stock.symbol,
+            price: stock.price,
+            amount: amount
+          })
         }
-        style={{ marginLeft: "15px", marginRight: "5px" }}
+        style={{
+          marginLeft: "15px",
+          marginRight: "5px",
+          backgroundColor: "green",
+          color: "white"
+        }}
       >
         Buy
       </button>
       <button
         className="button"
         onClick={async () =>
-          updateUser(
-            await addToTrades({
-              tradeType: "sell",
-              ticker: stock.symbol,
-              price: stock.price,
-              amount: amount
-            })
-          )
+          verifyTrade({
+            tradeType: "sell",
+            ticker: stock.symbol,
+            price: stock.price,
+            amount: amount
+          })
         }
-        style={{ marginLeft: "5px", marginRight: "10px" }}
+        style={{
+          marginLeft: "5px",
+          marginRight: "10px",
+          backgroundColor: "red",
+          color: "white"
+        }}
       >
         Sell
       </button>

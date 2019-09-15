@@ -4,21 +4,11 @@
 }
 #root .clickable {
   cursor: pointer;
-  color: black;
   transition: 0.8s;
 }
 #root .clickable:hover {
   cursor: pointer;
   color: green;
-  transition: 0.8s;
-}
-
-#root a {
-  color: green;
-  transition: 0.8s;
-}
-#root a:hover {
-  color: black;
   transition: 0.8s;
 }
 

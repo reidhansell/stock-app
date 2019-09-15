@@ -75,7 +75,7 @@ const Main = withRouter(props => {
             ).then(res => res.json())
           : null;
       if (result !== null) {
-        localStorage.setItem("data", result.data);
+        sessionStorage.setItem("data", result.data);
         console.log("user.inventory: " + JSON.stringify(user.inventory));
         user.inventory.forEach(x => {
           console.log("x" + JSON.stringify(x));
@@ -109,7 +109,7 @@ const Main = withRouter(props => {
     setWatchlist(watchlist);
     user.watchlist = watchlist;
 
-    localStorage.setItem("user", JSON.stringify(user));
+    sessionStorage.setItem("user", JSON.stringify(user));
     setLoading(false);
   };
 
@@ -135,7 +135,7 @@ const Main = withRouter(props => {
                 return x.ticker.toLowerCase().includes("test") ? null : (
                   <li className="clickable" onClick={() => onClick(x.ticker)}>
                     {console.log(x)}
-                    {x.ticker + ": " + x.name}
+                    <small>{x.ticker + ": " + x.name}</small>
                   </li>
                 );
               })
