@@ -4,10 +4,10 @@
   background-color: hsl(120, 2%, 20%);
   min-height: 100vh;
 }
-#root .title{
+#root .title {
   color: hsl(204, 33%, 97%);
 }
-#root .subtitle{
+#root .subtitle {
   color: hsl(205, 25%, 91%);
 }
 #root .clickable {
@@ -22,6 +22,11 @@
 
 #root a {
   color: hsl(128, 15%, 61%);
+  transition: 0.8s;
+}
+#root a:hover {
+  color: hsl(204, 33%, 97%);
+  transition: 0.8s;
 }
 
 #spinner {
