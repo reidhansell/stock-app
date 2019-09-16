@@ -72,7 +72,10 @@ const Stock = props => {
   return loading ? (
     <div id="spinner" style={{ margin: "auto" }} />
   ) : (
-    <div className="box" style={{ margin: "20px" }}>
+    <div
+      className="box"
+      style={{ margin: "20px", backgroundColor: "hsl(60, 1%, 14%)" }}
+    >
       <h3 className="columns is-mobile title is-3">
         <div className="column is-11" style={{ paddingLeft: "10%" }}>
           {stock.name}
@@ -99,7 +102,7 @@ const Stock = props => {
       <button className="button" onClick={() => setAmount(amount + 1)}>
         +
       </button>
-      <span style={{ fontSize: "18pt", margin: "10px" }}>{amount}</span>
+      <span style={{ fontSize: "18pt", margin: "10px", color:"hsl(204, 33%, 97%)" }}>{amount}</span>
       <button
         className="button"
         onClick={() => setAmount(amount - 1 > 1 ? amount - 1 : 1)}
@@ -121,7 +124,7 @@ const Stock = props => {
           marginLeft: "15px",
           marginRight: "5px",
           backgroundColor: "green",
-          color: "white"
+          color: "hsl(204, 33%, 97%)"
         }}
       >
         Buy
@@ -140,7 +143,7 @@ const Stock = props => {
           marginLeft: "5px",
           marginRight: "10px",
           backgroundColor: "red",
-          color: "white"
+          color: "hsl(204, 33%, 97%)"
         }}
       >
         Sell

@@ -79,10 +79,16 @@ function App() {
           ) : (
             <>
               <br />
-              <h1 className="title is-1">STONKS</h1>
+              <h3 className="title is-3">
+                Stocking
+                <span style={{ color: "hsl(128, 15%, 61%)" }}>Up</span>
+              </h3>
               <br />
               <h3 className="subtitle is-3">
-                Welcome to Stonks, a paper-trading web application.
+                Welcome to{" "}
+                <span style={{ color: "hsl(204, 33%, 97%)" }}>Stocking</span>
+                <span style={{ color: "hsl(128, 15%, 61%)" }}>Up</span>, a
+                paper-trading web application.
                 <br />
                 <br />
                 Log in with Google to start tracking and paper-trading stocks
