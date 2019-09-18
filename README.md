@@ -47,9 +47,7 @@ Reid Hansell
 
 This project is licensed under the MIT License
 
-### To do lists; in order of importance
-
-Main list:  
+### To do list
 -Backend verification
 -Use static text with smaller spinners for async data
 -Profit scoreboard
