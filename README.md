@@ -48,10 +48,10 @@ Reid Hansell
 This project is licensed under the MIT License
 
 ### To do list
--Backend verification
--Use static text with smaller spinners for async data
--Profit scoreboard
--More in-depth profiles
--Display more trade & stock data
--Beginner tutorial
+-Backend verification<br>
+-Use static text with smaller spinners for async data<br>
+-Profit scoreboard<br>
+-More in-depth profiles<br>
+-Display more trade & stock data<br>
+-Beginner tutorial<br>
  
