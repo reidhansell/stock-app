@@ -24,20 +24,20 @@ function App() {
   };
 
   const { isAuthenticated, user } = state;
-  //console.log("USER IN APP: " + JSON.stringify(user));
+  ////console.log("USER IN APP: " + JSON.stringify(user));
 
   if (sessionStorage.token) {
     setAuthToken(sessionStorage.token);
   }
 
   const responseGoogle = async response => {
-    console.log(response);
+    //console.log(response);
 
     var user = await register(
       response.profileObj.name.toString(),
       response.profileObj.email.toString()
     );
-    //console.log("USER IN APP.JS: " + user);
+    ////console.log("USER IN APP.JS: " + user);
 
     setState({
       ...state,
@@ -48,13 +48,13 @@ function App() {
     sessionStorage.setItem("token", response.tokenId);
     sessionStorage.setItem("user", JSON.stringify(user));
 
-    //console.log("LOCAL: " + sessionStorage.getItem("user"));
+    ////console.log("LOCAL: " + sessionStorage.getItem("user"));
 
     setAuthToken(sessionStorage.token);
   };
 
   const logout = () => {
-    console.log("logout entered");
+    //console.log("logout entered");
     sessionStorage.clear();
     setState({
       isAuthenticated: false,
@@ -71,7 +71,10 @@ function App() {
           logout={logout}
         />
 
-        <div className="has-text-centered container">
+        <div
+          className="has-text-centered container"
+          style={{ paddingBottom: "20px" }}
+        >
           {isAuthenticated ? (
             <Route
               component={() => <Routes user={user} updateUser={updateUser} />}
@@ -79,25 +82,18 @@ function App() {
           ) : (
             <>
               <br />
-              <h3 className="title is-3">
+              <h1 className="title is-1">
                 Stocking
                 <span style={{ color: "hsl(128, 15%, 61%)" }}>Up</span>
-              </h3>
-              <br />
-              <h3 className="subtitle is-3">
-                Welcome to{" "}
-                <span style={{ color: "hsl(204, 33%, 97%)" }}>Stocking</span>
-                <span style={{ color: "hsl(128, 15%, 61%)" }}>Up</span>, a
-                paper-trading web application.
-                <br />
-                <br />
-                Log in with Google to start tracking and paper-trading stocks
-              </h3>
+              </h1>
               <br />
               <h5 className="subtitle is-5">
-                ! Only an email and your "trades" are saved in our database.
-                Google handles the rest !
+                Log in with Google to start tracking and paper-trading stocks{" "}
               </h5>
+              <small>
+                Only an email and your "trades" are saved in our database.
+              </small>
+              <br />
               <br />
               <GoogleLogin
                 clientId="158562636348-ah58g7s1o64c16h1alsguklp5595r4uo.apps.googleusercontent.com"
@@ -107,7 +103,6 @@ function App() {
                 cookiePolicy={"single_host_origin"}
               />
 
-              <br />
               <br />
               <br />
               <small>

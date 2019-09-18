@@ -1,12 +1,14 @@
 import React from "react";
 import uuid from "uuid";
 
+import Fade from "react-reveal/Fade";
+
 const Main = props => {
   const user = props.user;
   return (
     <>
       <br />
-      <h1 className="title is-1">{user.name}</h1>
+      <h1 className="title is-1">{user.name}</h1><br />
       <h3 className="subtitle is-3">Stocks Owned:</h3>
       <ul>
         {user.inventory.length > 0
@@ -23,6 +25,7 @@ const Main = props => {
       </ul>
       <br />
       <h3 className="subtitle is-3">Trade History:</h3>
+      <Fade bottom cascade>
       <ul>
         {user.trades.length > 0
           ? user.trades.map(x => {
@@ -47,6 +50,7 @@ const Main = props => {
             })
           : null}
       </ul>
+      </Fade>
       <br />
     </>
   );

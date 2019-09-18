@@ -3,6 +3,7 @@ import stocks from "stock-ticker-symbol";
 import { addToWatchlist } from "../actions/user";
 import { withRouter } from "react-router-dom";
 import Stock from "./Stock";
+import uuid from "uuid";
 /* Data example:
 [
   { 52_week_high: "233.47",
@@ -44,11 +45,12 @@ console.log(data);*/
 const Main = withRouter(props => {
   const [data, setData] = useState([]);
   const user = props.user;
-  const [watchlist, setWatchlist] = useState(user.watchlist);
+  const updateUser = props.updateUser;
+  const { watchlist } = user;
   const [loading, setLoading] = useState(false);
   const [net, setNet] = useState(0);
 
-  console.log("USER IN MAIN: " + JSON.stringify(user));
+  //console.log("USER IN MAIN: " + JSON.stringify(user));
   //https://api.worldtradingdata.com/api/v1/stock?symbol=AAPL,MSFT,HSBA.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const Main = withRouter(props => {
           watchlist.map(x => {
             return x;
           }) +
-          ",.L&api_token=q24rdsKbfbnONlPNnBtPBAaJWBiwAu9vwS9lI8futWw4nqnvehZ0xTI0yw7x"
+          ",.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6"
       );*/
       setNet(0);
       var newNet = 0;
@@ -71,33 +73,36 @@ const Main = withRouter(props => {
                 watchlist.map(x => {
                   return x;
                 }) +
-                ",.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6"
+                ",.L&api_token=kTcRvj5BSriv9xcyfOaA2sQ24WSQx5orHw4FqMfctASEjjLGtbFIXHcfJ8FB"
             ).then(res => res.json())
           : null;
       if (result !== null) {
         sessionStorage.setItem("data", result.data);
-        console.log("user.inventory: " + JSON.stringify(user.inventory));
+        //console.log("user.inventory: " + JSON.stringify(user.inventory));
         user.inventory.forEach(x => {
-          console.log("x" + JSON.stringify(x));
+          //console.log("x" + JSON.stringify(x));
           if (x.amount > 0) {
             newNet +=
               result.data.find(x2 => {
-                console.log("x2" + JSON.stringify(x2));
+                //console.log("x2" + JSON.stringify(x2));
                 return x2.symbol === x.ticker;
               }) === null
-                ? null
+                ? 0
                 : result.data.find(x2 => {
-                    console.log("x2" + JSON.stringify(x2));
+                    //console.log("x2" + JSON.stringify(x2));
                     return x2.symbol === x.ticker;
                   }).price * x.amount;
           }
         });
       }
+      //console.log("data: " + JSON.stringify(result.data));
       setNet(user.capital + newNet);
       setData(result === null ? null : result.data);
     };
 
     fetchData();
+
+    return () => {};
   }, [watchlist, user]);
 
   const [search, setSearch] = useState("");
@@ -106,11 +111,8 @@ const Main = withRouter(props => {
     setSearch("");
     setLoading(true);
     const watchlist = await addToWatchlist(ticker);
-    setWatchlist(watchlist);
     user.watchlist = watchlist;
-
-    sessionStorage.setItem("user", JSON.stringify(user));
-    setLoading(false);
+    updateUser(user);
   };
 
   return (
@@ -130,11 +132,20 @@ const Main = withRouter(props => {
         />
         <br />
         <ul style={{ borderBottom: "1px solid gray" }}>
+          <br />
           {search
             ? stocks.search(search).map(x => {
-                return x.ticker.toLowerCase().includes("test") ? null : (
-                  <li className="clickable" onClick={() => onClick(x.ticker)}>
-                    {console.log(x)}
+                return x
+                  .toString()
+                  .match(
+                    /^([0-9]|[a-z])+([0-9a-z]+)$/i
+                  ) ? null : x.ticker.toLowerCase().includes("test") ? null : (
+                  <li
+                    key={uuid.v4()}
+                    className="clickable"
+                    onClick={() => onClick(x.ticker)}
+                  >
+                    {/*console.log(x)*/}
                     <small>{x.ticker + ": " + x.name}</small>
                   </li>
                 );
@@ -153,21 +164,34 @@ const Main = withRouter(props => {
             ${25000 - net.toFixed(2)}
           </span>
         </h5>
+        {loading ? (
+          <div
+            className="box"
+            style={{ margin: "20px", backgroundColor: "hsl(60, 1%, 14%)" }}
+          >
+            <div
+              id="spinner"
+              style={{ margin: "auto", marginBottom: "20px" }}
+            />
+          </div>
+        ) : null}
+        {user.watchlist.map(x => {
+          return (
+            <Stock
+              key={uuid.v4()}
+              stock={
+                data
+                  ? data.find(x2 => {
+                      return x2.symbol === x;
+                    })
+                  : null
+              }
+              user={user}
+              updateUser={props.updateUser}
+            />
+          );
+        })}
       </div>
-      {loading ? <div id="spinner" style={{ margin: "auto" }} /> : null}
-      {data
-        ? data.map(x => {
-            return (
-              <Stock
-                key={x.name}
-                stock={x}
-                user={user}
-                updateUser={props.updateUser}
-                setWatchlist={watchlist => setWatchlist(watchlist)}
-              />
-            );
-          })
-        : null}
     </>
   );
 });

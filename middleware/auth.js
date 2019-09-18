@@ -24,11 +24,11 @@ module.exports = function(req, res, next) {
       const userid = payload["sub"];
       // If request specified a G Suite domain:
       //const domain = payload['hd'];
-      console.log("payload: ");
-      console.log(payload);
+      //console.log("payload: ");
+      //console.log(payload);
       req.user = payload;
-      console.log("req.user 1: ");
-      console.log(req.user);
+      //console.log("req.user 1: ");
+      //console.log(req.user);
       next();
     }
     verify().catch(console.error);
