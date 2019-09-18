@@ -1,7 +1,7 @@
 {
-  "name": "stock-app",
+  "name": "StockingUp",
   "version": "1.0.0",
-  "description": "stock app",
+  "description": "Paper trading web application",
   "main": "server.js",
   "scripts": {
     "start": "node server",
