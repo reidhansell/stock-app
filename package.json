@@ -11,6 +11,7 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix react && npm run build --prefix react"
   },
   "dependencies": {
+    "compression": "^1.7.4",
     "config": "^3.2.2",
     "express": "~4.16.1",
     "google-auth-library": "^5.2.2",
