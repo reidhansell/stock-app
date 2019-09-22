@@ -1,5 +1,5 @@
 {
-  "name": "StockingUp",
+  "name": "stocking-up",
   "version": "1.0.0",
   "description": "Paper trading web application",
   "main": "server.js",

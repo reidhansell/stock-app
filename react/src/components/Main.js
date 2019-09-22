@@ -50,20 +50,8 @@ const Main = withRouter(props => {
   const [loading, setLoading] = useState(false);
   const [net, setNet] = useState(0);
 
-  //console.log("USER IN MAIN: " + JSON.stringify(user));
-  //https://api.worldtradingdata.com/api/v1/stock?symbol=AAPL,MSFT,HSBA.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6
-
   useEffect(() => {
     const fetchData = async () => {
-      //For debugging the query:
-
-      /*console.log(
-        "QUERY IN MAIN: https://api.worldtradingdata.com/api/v1/stock?symbol=" +
-          watchlist.map(x => {
-            return x;
-          }) +
-          ",.L&api_token=azIHEDZflMLwkJZM1Awu1MD0ed3fYZlGOwYSX9worzLjToLu7ONbNPYBxxA6"
-      );*/
       setNet(0);
       var newNet = 0;
       const result =
@@ -78,24 +66,21 @@ const Main = withRouter(props => {
           : null;
       if (result !== null) {
         sessionStorage.setItem("data", result.data);
-        //console.log("user.inventory: " + JSON.stringify(user.inventory));
+
         user.inventory.forEach(x => {
-          //console.log("x" + JSON.stringify(x));
           if (x.amount > 0) {
             newNet +=
               result.data.find(x2 => {
-                //console.log("x2" + JSON.stringify(x2));
                 return x2.symbol === x.ticker;
               }) === null
                 ? 0
                 : result.data.find(x2 => {
-                    //console.log("x2" + JSON.stringify(x2));
                     return x2.symbol === x.ticker;
                   }).price * x.amount;
           }
         });
       }
-      //console.log("data: " + JSON.stringify(result.data));
+
       setNet(user.capital + newNet);
       setData(result === null ? null : result.data);
     };
@@ -145,7 +130,6 @@ const Main = withRouter(props => {
                     className="clickable"
                     onClick={() => onClick(x.ticker)}
                   >
-                    {/*console.log(x)*/}
                     <small>{x.ticker + ": " + x.name}</small>
                   </li>
                 );

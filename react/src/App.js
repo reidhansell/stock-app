@@ -24,20 +24,16 @@ function App() {
   };
 
   const { isAuthenticated, user } = state;
-  ////console.log("USER IN APP: " + JSON.stringify(user));
 
   if (sessionStorage.token) {
     setAuthToken(sessionStorage.token);
   }
 
   const responseGoogle = async response => {
-    //console.log(response);
-
     var user = await register(
       response.profileObj.name.toString(),
       response.profileObj.email.toString()
     );
-    ////console.log("USER IN APP.JS: " + user);
 
     setState({
       ...state,
@@ -48,13 +44,10 @@ function App() {
     sessionStorage.setItem("token", response.tokenId);
     sessionStorage.setItem("user", JSON.stringify(user));
 
-    ////console.log("LOCAL: " + sessionStorage.getItem("user"));
-
     setAuthToken(sessionStorage.token);
   };
 
   const logout = () => {
-    //console.log("logout entered");
     sessionStorage.clear();
     setState({
       isAuthenticated: false,

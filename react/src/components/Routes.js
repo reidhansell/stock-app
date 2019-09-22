@@ -9,7 +9,6 @@ import NotFound from "./NotFound";
 import { withRouter } from "react-router-dom";
 
 const Routes = withRouter(props => {
-  //console.log("USER IN ROUTES: " + JSON.stringify(props.user));
   return (
     <Switch>
       <Route

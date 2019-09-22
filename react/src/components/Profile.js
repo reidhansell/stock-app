@@ -8,7 +8,8 @@ const Main = props => {
   return (
     <>
       <br />
-      <h1 className="title is-1">{user.name}</h1><br />
+      <h1 className="title is-1">{user.name}</h1>
+      <br />
       <h3 className="subtitle is-3">Stocks Owned:</h3>
       <ul>
         {user.inventory.length > 0
@@ -26,30 +27,31 @@ const Main = props => {
       <br />
       <h3 className="subtitle is-3">Trade History:</h3>
       <Fade bottom cascade>
-      <ul>
-        {user.trades.length > 0
-          ? user.trades.map(x => {
-              return (
-                <li
-                  style={{
-                    borderBottom: "1px solid gray",
-                    color: x.tradeType === "buy" ? "green" : "red"
-                  }}
-                  key={uuid.v4()}
-                >
-                  {x.ticker}
-                  <br />
-                  {x.date.substring(0, 10)}
-                  <br />
-                  {x.tradeType.charAt(0).toUpperCase() + x.tradeType.slice(1)} (
-                  {x.amount})
-                  <br />
-                  {x.price}
-                </li>
-              );
-            })
-          : null}
-      </ul>
+        <ul>
+          {user.trades.length > 0
+            ? user.trades.map(x => {
+                return (
+                  <li
+                    style={{
+                      borderBottom: "1px solid gray",
+                      color: x.tradeType === "buy" ? "green" : "red"
+                    }}
+                    key={uuid.v4()}
+                  >
+                    {x.ticker}
+                    <br />
+                    {x.date.substring(0, 10)}
+                    <br />
+                    {x.tradeType.charAt(0).toUpperCase() +
+                      x.tradeType.slice(1)}{" "}
+                    ({x.amount})
+                    <br />
+                    {x.price}
+                  </li>
+                );
+              })
+            : null}
+        </ul>
       </Fade>
       <br />
     </>

@@ -9,10 +9,10 @@ const Main = () => {
         <br />
         <h3 className="subtitle is-3">What?</h3>
         <p style={{ textAlign: "left" }}>
-          StockingUp is an app for paper trading. The money and trades are all on paper but the stocks are real with
-          up-to-date prices from worldtradingdata.com. You are given $25,000 to
-          start with, see how much you can profit! Your trade history can be
-          found in your profile
+          StockingUp is an app for paper trading. The money and trades are all
+          on paper but the stocks are real with up-to-date prices from
+          worldtradingdata.com. You are given $25,000 to start with, see how
+          much you can profit! Your trade history can be found in your profile
         </p>
         <br />
         <h3 className="subtitle is-3">How?</h3>
@@ -40,9 +40,11 @@ const Main = () => {
           >
             Reid Hansell
           </a>
-          , a software developer currently seeking opportunity to use my skills in a professional capacity. I am passionate about the stock market and hope to turn
-          StockingUp into a platform for beginners to get into the stock market. I
-          hope that seeing potential profits will motivate others to invest
+          , a software developer currently seeking opportunity to use my skills
+          in a professional capacity. I am passionate about the stock market and
+          hope to turn StockingUp into a platform for beginners to get into the
+          stock market. I hope that seeing potential profits will motivate
+          others to invest
         </p>
       </div>
     </>

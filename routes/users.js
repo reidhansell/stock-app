@@ -10,15 +10,12 @@ const User = require("../models/User");
 // @access   Public
 router.post("/", async (req, res) => {
   const { name, email } = req.body;
-  //console.log("Server entered with params:");
-  //console.log(name + " " + email);
 
   try {
     let user = await User.findOne({ email });
 
     if (user) {
       res.json(user);
-      //console.log(user);
       return res;
     }
 
@@ -28,8 +25,6 @@ router.post("/", async (req, res) => {
     });
     await user.save();
     res.json(user);
-
-    //console.log(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -41,10 +36,6 @@ router.post("/", async (req, res) => {
 // @access   Private
 router.put("/watchlist", auth, async (req, res) => {
   const { stock } = req.body;
-  //console.log("Server entered with params:");
-  //console.log(stock);
-
-  //console.log(req.user.email);
   try {
     const user = await User.findOne({ email: req.user.email });
 
@@ -53,7 +44,6 @@ router.put("/watchlist", auth, async (req, res) => {
     await user.save();
 
     res.json(user.watchlist);
-    //console.log(user.watchlist);
   } catch (err) {
     res.status(500).send("Server Error");
   }
@@ -63,8 +53,6 @@ router.put("/watchlist", auth, async (req, res) => {
 // @desc     Remove ticker from watchlist
 // @access   Private
 router.delete("/watchlist/:ticker", auth, async (req, res) => {
-  //console.log("Server entered with params:");
-  //console.log(req.params.ticker);
   try {
     const user = await User.findOne({ email: req.user.email });
 
@@ -73,7 +61,6 @@ router.delete("/watchlist/:ticker", auth, async (req, res) => {
     await user.save();
 
     res.json(user.watchlist);
-    //console.log(user.watchlist);
   } catch (err) {
     res.status(500).send("Server Error");
   }
@@ -85,10 +72,6 @@ router.delete("/watchlist/:ticker", auth, async (req, res) => {
 router.put("/trades", auth, async (req, res) => {
   const { trade } = req.body;
   trade.date = new Date(Date.now());
-  //console.log("Server entered with params:");
-  //console.log(trade);
-
-  //console.log(req.user.email);
   try {
     const user = await User.findOne({ email: req.user.email });
 
@@ -117,7 +100,6 @@ router.put("/trades", auth, async (req, res) => {
     await user.save();
 
     res.json(user);
-    //console.log(user);
   } catch (err) {
     res.status(500).send("Server Error");
   }
