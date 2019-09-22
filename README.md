@@ -1,6 +1,6 @@
 # StockingUp
 
-A MERN stack paper trading application
+A paper trading web application. Made with the MERN stack
 
 ## Quick Start
 
