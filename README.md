@@ -2,8 +2,6 @@
 
 A MERN stack paper trading application
 
-Scroll to the bottom for a todo list
-
 ## Quick Start
 
 Create default.json inside of config/
@@ -33,25 +31,10 @@ npm install
 npm run dev
 ```
 
-## App Info
-
-### Author
+## Author
 
 Reid Hansell
 
-### Version
-
-1.0.0
-
-### License
+## License
 
 This project is licensed under the MIT License
-
-### To do list
--Backend verification<br>
--Use static text with smaller spinners for async data<br>
--Profit scoreboard<br>
--More in-depth profiles<br>
--Display more trade & stock data<br>
--Beginner tutorial<br>
- 
