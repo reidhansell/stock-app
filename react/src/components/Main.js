@@ -4,6 +4,8 @@ import { addToWatchlist } from "../actions/user";
 import { withRouter } from "react-router-dom";
 import Stock from "./Stock";
 import uuid from "uuid";
+
+import Fade from "react-reveal/Fade";
 /* Data example:
 [
   { 52_week_high: "233.47",
@@ -59,7 +61,7 @@ const Main = withRouter(props => {
           ? await fetch(
               "https://api.worldtradingdata.com/api/v1/stock?symbol=" +
                 watchlist.map(x => {
-                  return x;
+                  return x.ticker;
                 }) +
                 ",.L&api_token=kTcRvj5BSriv9xcyfOaA2sQ24WSQx5orHw4FqMfctASEjjLGtbFIXHcfJ8FB"
             ).then(res => res.json())
@@ -92,10 +94,10 @@ const Main = withRouter(props => {
 
   const [search, setSearch] = useState("");
 
-  const onClick = async ticker => {
+  const onClick = async stock => {
     setSearch("");
     setLoading(true);
-    const watchlist = await addToWatchlist(ticker);
+    const watchlist = await addToWatchlist(stock);
     user.watchlist = watchlist;
     updateUser(user);
   };
@@ -128,7 +130,7 @@ const Main = withRouter(props => {
                   <li
                     key={uuid.v4()}
                     className="clickable"
-                    onClick={() => onClick(x.ticker)}
+                    onClick={() => onClick({ name: x.name, ticker: x.ticker })}
                   >
                     <small>{x.ticker + ": " + x.name}</small>
                   </li>
@@ -140,14 +142,25 @@ const Main = withRouter(props => {
         <br />
         <h5 className="title is-5">Capital: ${user.capital.toFixed(2)}</h5>
         <h5 className="title is-5">
-          Net: ${net === null ? 0 : net.toFixed(2)}
+          Net: {net === 0 ? "Loading..." : "$" + net.toFixed(2)}
         </h5>
-        <h5 className="title is-5">
-          Profit/losses:{" "}
-          <span style={{ color: net - 25000 >= 0 ? "green" : "red" }}>
-            ${25000 - net.toFixed(2)}
-          </span>
-        </h5>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <h5 className="title is-5" style={{ display: "flex" }}>
+            Profit/losses:{" "}
+            {net === 0 ? (
+              <div id="spinner-extra-small" style={{ marginLeft: "5px" }} />
+            ) : (
+              <span
+                style={{
+                  color: net - 25000 >= 0 ? "green" : "red",
+                  marginLeft: "5px"
+                }}
+              >
+                ${(net - 25000).toFixed(2)}
+              </span>
+            )}
+          </h5>
+        </div>
         {loading ? (
           <div
             className="box"
@@ -159,22 +172,28 @@ const Main = withRouter(props => {
             />
           </div>
         ) : null}
-        {user.watchlist.map(x => {
-          return (
-            <Stock
-              key={uuid.v4()}
-              stock={
-                data
-                  ? data.find(x2 => {
-                      return x2.symbol === x;
-                    })
-                  : null
-              }
-              user={user}
-              updateUser={props.updateUser}
-            />
-          );
-        })}
+        <Fade cascade>
+          <ul>
+            {user.watchlist.map(x => {
+              console.log(x._id);
+              return (
+                <li key={uuid.v4()}>
+                  <Stock
+                    stock={
+                      data && data.length > 0
+                        ? {...data.find(x2 => {
+                            return x2.symbol === x.ticker;
+                          }), id: x._id}
+                        : { name: x.name, symbol: x.ticker, id: x._id }
+                    }
+                    user={user}
+                    updateUser={props.updateUser}
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </Fade>
       </div>
     </>
   );

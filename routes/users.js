@@ -52,11 +52,16 @@ router.put("/watchlist", auth, async (req, res) => {
 // @route    DELETE api/users/watchlist/:ticker
 // @desc     Remove ticker from watchlist
 // @access   Private
-router.delete("/watchlist/:ticker", auth, async (req, res) => {
+router.delete("/watchlist/:id", auth, async (req, res) => {
   try {
+    console.log(req.params.id)
     const user = await User.findOne({ email: req.user.email });
 
-    await user.watchlist.pull(req.params.ticker);
+    const stock = user.watchlist.find(x => {
+      return x.id === req.params.id;
+    });
+    console.log(stock);
+    await stock.remove();
 
     await user.save();
 

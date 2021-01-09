@@ -32,8 +32,26 @@
 #spinner {
   border: 2px solid lightgray;
   border-top-color: white;
-  width: 17.5vh;
-  height: 17.5vh;
+  width: 20vw;
+  height: 20vw;
+  border-radius: 50%;
+  animation: spin 1s infinite;
+}
+
+#spinner-small {
+  border: 2px solid lightgray;
+  border-top-color: white;
+  width: 3.5vw;
+  height: 3.5vw;
+  border-radius: 50%;
+  animation: spin 1s infinite;
+}
+
+#spinner-extra-small {
+  border: 2px solid lightgray;
+  border-top-color: white;
+  width: 1vw;
+  height: 1vw;
   border-radius: 50%;
   animation: spin 1s infinite;
 }

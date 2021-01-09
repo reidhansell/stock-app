@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
       amount: { type: Number, default: 1 }
     }
   ],
-  watchlist: [String],
+  watchlist: [{ name: { type: String }, ticker: { type: String } }],
   inventory: [
     {
       ticker: { type: String, required: true },

@@ -45,9 +45,9 @@ export const addToWatchlist = async stock => {
 };
 
 // Remove ticker from watchlist
-export const removeFromWatchlist = async ticker => {
+export const removeFromWatchlist = async id => {
   try {
-    const res = await axios.delete(`/api/users/watchlist/${ticker}`);
+    const res = await axios.delete(`/api/users/watchlist/${id}`);
 
     return res.data;
   } catch (err) {

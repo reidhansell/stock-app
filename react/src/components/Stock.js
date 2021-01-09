@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { removeFromWatchlist, addToTrades } from "../actions/user";
 
-import Fade from "react-reveal/Fade";
+
 
 /* Data example:
 [
@@ -34,7 +34,6 @@ const Stock = props => {
   const stock = props.stock;
   const user = props.user;
   const updateUser = props.updateUser;
-  const [loading, setLoading] = useState(false);
   const [amount, setAmount] = useState(1);
 
   const verifyTrade = async trade => {
@@ -53,7 +52,7 @@ const Stock = props => {
     }
   };
 
-  const onClick = async ticker => {
+  const onClick = async stock => {
     if (
       user.inventory.find(x => {
         return x.ticker === stock.symbol && x.amount > 0;
@@ -61,8 +60,8 @@ const Stock = props => {
     ) {
       return;
     } else {
-      setLoading(true);
-      const watchlist = await removeFromWatchlist(ticker);
+      console.log(stock.id);
+      const watchlist = await removeFromWatchlist(stock.id);
       user.watchlist = watchlist;
 
       updateUser(user);
@@ -74,92 +73,94 @@ const Stock = props => {
       className="box"
       style={{ margin: "20px", backgroundColor: "hsl(60, 1%, 14%)" }}
     >
-      {loading || !stock ? (
-        <div id="spinner" style={{ margin: "auto", marginBottom: "20px" }} />
-      ) : (
-        <Fade>
-          <h3 className="columns is-mobile title is-3">
-            <div className="column is-11" style={{ paddingLeft: "10%" }}>
-              {stock.name}
-            </div>
-            <div
-              className="column clickable has-text-right is-1"
-              onClick={() => onClick(stock.symbol)}
-            >
-              <small>x</small>
-            </div>
-          </h3>
-          <h5 className="subtitle is-5">
-            Price: {stock.price}
-            <br />
-            Owned:{" "}
-            {user.inventory.find(x => {
-              return x.ticker === stock.symbol;
+      
+        <h3 className="columns is-mobile title is-3">
+          <div className="column is-11" style={{ paddingLeft: "10%" }}>
+            {stock.name}
+          </div>
+          <div
+            className="column clickable has-text-right is-1"
+            onClick={() => onClick(stock)}
+          >
+            <small>x</small>
+          </div>
+        </h3>
+
+        <h5 className="subtitle is-5">
+          {!stock.price ? (
+            <div id="spinner-extra-small" style={{ margin: "auto" }} />
+          ) : (
+            <>Price: ${stock.price}</>
+          )}
+          {stock.price ? <br /> : null}
+          Owned:{" "}
+          {user.inventory.find(x => {
+            return x.ticker === stock.symbol;
+          })
+            ? user.inventory.find(x => {
+                return x.ticker === stock.symbol;
+              }).amount
+            : 0}
+        </h5>
+
+        <button className="button" onClick={() => setAmount(amount + 1)}>
+          +
+        </button>
+        <span
+          style={{
+            fontSize: "18pt",
+            margin: "10px",
+            color: "hsl(204, 33%, 97%)"
+          }}
+        >
+          {amount}
+        </span>
+        <button
+          className="button"
+          onClick={() => setAmount(amount - 1 > 1 ? amount - 1 : 1)}
+          style={{ marginRight: "15px" }}
+        >
+          -
+        </button>
+        <button
+          className="button"
+          onClick={async () =>
+            verifyTrade({
+              tradeType: "buy",
+              ticker: stock.symbol,
+              price: stock.price,
+              amount: amount
             })
-              ? user.inventory.find(x => {
-                  return x.ticker === stock.symbol;
-                }).amount
-              : 0}
-          </h5>
-          <button className="button" onClick={() => setAmount(amount + 1)}>
-            +
-          </button>
-          <span
-            style={{
-              fontSize: "18pt",
-              margin: "10px",
-              color: "hsl(204, 33%, 97%)"
-            }}
-          >
-            {amount}
-          </span>
-          <button
-            className="button"
-            onClick={() => setAmount(amount - 1 > 1 ? amount - 1 : 1)}
-            style={{ marginRight: "15px" }}
-          >
-            -
-          </button>
-          <button
-            className="button"
-            onClick={async () =>
-              verifyTrade({
-                tradeType: "buy",
-                ticker: stock.symbol,
-                price: stock.price,
-                amount: amount
-              })
-            }
-            style={{
-              marginLeft: "15px",
-              marginRight: "5px",
-              backgroundColor: "green",
-              color: "hsl(204, 33%, 97%)"
-            }}
-          >
-            Buy
-          </button>
-          <button
-            className="button"
-            onClick={async () =>
-              verifyTrade({
-                tradeType: "sell",
-                ticker: stock.symbol,
-                price: stock.price,
-                amount: amount
-              })
-            }
-            style={{
-              marginLeft: "5px",
-              marginRight: "10px",
-              backgroundColor: "red",
-              color: "hsl(204, 33%, 97%)"
-            }}
-          >
-            Sell
-          </button>
-        </Fade>
-      )}
+          }
+          style={{
+            marginLeft: "15px",
+            marginRight: "5px",
+            backgroundColor: "green",
+            color: "hsl(204, 33%, 97%)"
+          }}
+        >
+          Buy
+        </button>
+        <button
+          className="button"
+          onClick={async () =>
+            verifyTrade({
+              tradeType: "sell",
+              ticker: stock.symbol,
+              price: stock.price,
+              amount: amount
+            })
+          }
+          style={{
+            marginLeft: "5px",
+            marginRight: "10px",
+            backgroundColor: "red",
+            color: "hsl(204, 33%, 97%)"
+          }}
+        >
+          Sell
+        </button>
+
     </div>
   );
 };
